@@ -1,0 +1,244 @@
+public class InvertedHalfDiamond {
+    public static void main(String[] args) {
+        int n = 5;
+
+        // Upper half - Inverted pyramid
+        for (int i = 0; i < n; i++) {
+            for (int s = 0; s < i; s++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j < (2 * (n - i) - 1); j++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+
+        // Lower half - Normal pyramid
+        for (int i = 1; i < n; i++) {
+            for (int s = i; s < n - 1; s++) {
+                System.out.print(" ");
+            }
+            for (int j = 0; j < (2 * i + 1); j++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+ouput:
+
+*****
+ ***
+  *
+ ***
+*****
+
+
+ Given two arrays of numbers, the second array will have all the numbers in first array except one number. Write a program to find the missing number in the second array without using brute force.
+
+Example:
+
+Input: [29, 6, 19, 25, 9, 14, 12, 1, 8], [14, 1, 19, 29, 25, 8, 12, 9] Output: 6
+
+public class MissingNumber {
+    public static void main(String[] args) {
+        int[] arr1 = {29, 6, 19, 25, 9, 14, 12, 1, 8};
+        int[] arr2 = {14, 1, 19, 29, 25, 8, 12, 9};
+
+        int missing = findMissingNumber(arr1, arr2);
+        System.out.println("Missing number: " + missing);
+    }
+
+    public static int findMissingNumber(int[] arr1, int[] arr2) {
+        int sum1 = 0;
+        int sum2 = 0;
+
+        // Sum of first array
+        for (int i = 0; i < arr1.length; i++) {
+            sum1 += arr1[i];
+        }
+
+        // Sum of second array
+        for (int i = 0; i < arr2.length; i++) {
+            sum2 += arr2[i];
+        }
+
+        // Difference gives the missing number
+        return sum1 - sum2;
+    }
+}
+
+
+
+
+
+Write a program to reverse the sentence retaining the space between the words. Example: Input: today is a good day Output: yaddo og a siya dot Input: I ate an apple Output: e Ipp an aetal
+
+public class ReverseSentenceWithSpaces {
+    public static void main(String[] args) {
+        String input = "today is a good day";
+        String result = reverseRetainingSpaces(input);
+        System.out.println(result);
+    }
+
+    public static String reverseRetainingSpaces(String str) {
+        char[] input = str.toCharArray();
+        char[] result = new char[input.length];
+
+        // Step 1: mark spaces in result
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] == ' ') {
+                result[i] = ' ';
+            }
+        }
+
+        // Step 2: fill non-space characters from end
+        int j = input.length - 1;
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] != ' ') {
+                // move j backward until non-space found
+                while (j >= 0 && result[j] == ' ') {
+                    j--;
+                }
+                result[j] = input[i];
+                j--;
+            }
+        }
+
+        return new String(result);
+    }
+}
+
+
+
+Given a sorted array of numbers and a number, write a program to check whether there exist two elements in the array whose sum is exactly x and print those two numbers.
+
+Example:
+
+Input:
+
+Array - [3, 8, 14, 16, 21, 33]
+
+Number - 30
+
+Output: 14, 16
+
+Input:
+
+Array - [2, 6, 11, 26, 41, 73]
+
+Number - 30
+
+Output: Not found
+
+
+
+public class PairWithGivenSum {
+    public static void main(String[] args) {
+        int[] arr = {3, 8, 14, 16, 21, 33};
+        int x = 30;
+
+        findPair(arr, x);
+    }
+
+    public static void findPair(int[] arr, int x) {
+        int left = 0;
+        int right = arr.length - 1;
+        boolean found = false;
+
+        while (left < right) {
+            int sum = arr[left] + arr[right];
+
+            if (sum == x) {
+                System.out.println(arr[left] + ", " + arr[right]);
+                found = true;
+                break;
+            }
+            else if (sum < x) {
+                left++; // move right to get a larger sum
+            } 
+            else {
+                right--; // move left to get a smaller sum
+            }
+        }
+
+        if (!found) {
+            System.out.println("Not found");
+        }
+    }
+}
+
+
+
+
+
+5. Given an array of items of different weights and bins each of equal capacity, assign each item to a bin such that number of total used bins is minimized. All items have weights smaller than bin capacity. Example: Input: Items: [2, 1, 3, 1, 1, 2, 1, 2] Capacity: 5 Output: [ [2, 1, 1, 1), [3, 2], [1, 2] ] Items: [4, 1, 3, 2, 5, 2, 1, 1, 6, 2] Capacity: 7 Output: [[4, 1, 2], [3, 2, 1, 1], [5, 2], [6] ]
+
+
+public class BinPacking {
+    public static void main(String[] args) {
+        int[] items = {2, 1, 3, 1, 1, 2, 1, 2};
+        int capacity = 5;
+
+        packBins(items, capacity);
+    }
+
+    public static void packBins(int[] items, int capacity) {
+        // Step 1: Sort items in descending order (simple bubble sort)
+        for (int i = 0; i < items.length - 1; i++) {
+            for (int j = 0; j < items.length - i - 1; j++) {
+                if (items[j] < items[j + 1]) {
+                    int temp = items[j];
+                    items[j] = items[j + 1];
+                    items[j + 1] = temp;
+                }
+            }
+        }
+
+        // Arrays to hold bins and their current weights
+        int[][] bins = new int[items.length][items.length];
+        int[] binWeights = new int[items.length];
+        int[] binCount = new int[items.length];
+        int totalBins = 0;
+
+        // Step 2: Place each item
+        for (int i = 0; i < items.length; i++) {
+            boolean placed = false;
+            for (int b = 0; b < totalBins; b++) {
+                if (binWeights[b] + items[i] <= capacity) {
+                    bins[b][binCount[b]] = items[i];
+                    binCount[b]++;
+                    binWeights[b] += items[i];
+                    placed = true;
+                    break;
+                }
+            }
+
+            // Create new bin if not placed
+            if (!placed) {
+                bins[totalBins][0] = items[i];
+                binWeights[totalBins] = items[i];
+                binCount[totalBins] = 1;
+                totalBins++;
+            }
+        }
+
+        // Step 3: Print bins
+        System.out.print("[ ");
+        for (int i = 0; i < totalBins; i++) {
+            System.out.print("[");
+            for (int j = 0; j < binCount[i]; j++) {
+                System.out.print(bins[i][j]);
+                if (j < binCount[i] - 1)
+                    System.out.print(", ");
+            }
+            System.out.print("]");
+            if (i < totalBins - 1)
+                System.out.print(", ");
+        }
+        System.out.println(" ]");
+    }
+}
+
